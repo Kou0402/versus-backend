@@ -7,4 +7,4 @@ clean:
 	rm -rf ./threads/threads
 	
 build:
-	GOOS=linux GOARCH=amd64 go build -o threads/bin/threads ./threads
+	cd threads && GOOS=linux GOARCH=amd64 go build -o ./bin/threads ./cmd

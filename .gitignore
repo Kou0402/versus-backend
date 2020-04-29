@@ -1,2 +1,5 @@
 # Go binary files
 bin
+
+# VScode workspace
+*.code-workspace
