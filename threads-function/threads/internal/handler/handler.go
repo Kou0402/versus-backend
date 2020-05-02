@@ -10,7 +10,7 @@ import (
 )
 
 var routes = map[string]actions.Action{
-	"GET": &actions.GetThreads{},
+	"GET": &actions.ThreadsGetter{},
 }
 
 // Handler is Lambda handler
