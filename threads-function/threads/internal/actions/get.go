@@ -10,34 +10,39 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-type FetchThreads struct{}
+type GetThreads struct{}
 
-func (f *FetchThreads) Run(request events.APIGatewayProxyRequest) ([]models.Thread, error) {
+func (g *GetThreads) Run(request events.APIGatewayProxyRequest) ([]models.Thread, error) {
+	if val, ok := request.PathParameters["threadId"]; ok {
+		return fetchThread(models.ThreadID(val))
+	}
+	return fetchThreads()
+}
+
+func fetchThreads() ([]models.Thread, error) {
 	db := getDynamoSess()
 
 	result, err := db.Scan(&dynamodb.ScanInput{
-		TableName: aws.String("threads"),
+		TableName: aws.String(ThreadsTable),
 	})
-
 	if err != nil {
-		return []models.Thread{}, err
+		return nil, err
 	}
 
 	var threads []models.Thread
 	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &threads)
 	if err != nil {
-		return []models.Thread{}, err
+		return nil, err
 	}
 
 	return threads, nil
 }
 
-// fetchThread は DynamoDB の Threads テーブルのデータを取得する。
-func FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
+func fetchThread(threadID models.ThreadID) ([]models.Thread, error) {
 	db := getDynamoSess()
 
 	result, err := db.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String("threads"),
+		TableName: aws.String(ThreadsTable),
 		Key: map[string]*dynamodb.AttributeValue{
 			"threadId": {
 				S: aws.String(string(threadID)),
@@ -45,14 +50,14 @@ func FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
 		},
 	})
 	if err != nil {
-		return []models.Thread{}, err
+		return nil, err
 	}
 
 	items := []map[string]*dynamodb.AttributeValue{result.Item}
 	var threads []models.Thread
 	err = dynamodbattribute.UnmarshalListOfMaps(items, &threads)
 	if err != nil {
-		return []models.Thread{}, err
+		return nil, err
 	}
 
 	return threads, nil
