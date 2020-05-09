@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-func FetchThreads() ([]models.Thread, error) {
+func (t *ThreadsRepositoryImpl) FetchThreads() ([]models.Thread, error) {
 	db := getDynamoSess()
 
 	result, err := db.Scan(&dynamodb.ScanInput{
@@ -27,7 +27,7 @@ func FetchThreads() ([]models.Thread, error) {
 	return threads, nil
 }
 
-func FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
+func (t *ThreadsRepositoryImpl) FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
 	db := getDynamoSess()
 
 	result, err := db.GetItem(&dynamodb.GetItemInput{

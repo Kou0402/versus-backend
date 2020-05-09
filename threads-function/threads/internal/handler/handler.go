@@ -9,13 +9,14 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-var routes = map[string]actions.Action{
-	"GET": &actions.ThreadsGetter{},
+var routes = map[string]actions.ActionFactory{
+	"GET": actions.NewThreadsGetter,
 }
 
 // Handler is Lambda handler
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	action := routes[request.HTTPMethod]
+	factory := routes[request.HTTPMethod]
+	action := factory()
 	threads, err := action.Run(request)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
