@@ -13,6 +13,12 @@ var routes = map[string]actions.ActionFactory{
 	"GET": actions.NewThreadsGetter,
 }
 
+// CORS compatible
+var headers = map[string]string{
+	"Content-Type":                "application/json",
+	"Access-Control-Allow-Origin": "*",
+}
+
 // Handler is Lambda handler
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factory := routes[request.HTTPMethod]
@@ -27,5 +33,6 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	return events.APIGatewayProxyResponse{
 		Body:       string(threadJSON),
 		StatusCode: 200,
+		Headers:    headers,
 	}, nil
 }
