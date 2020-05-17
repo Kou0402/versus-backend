@@ -16,7 +16,7 @@ func TestThreadsGetterRun_1件のスレッドが返却される(t *testing.T) {
 		PathParameters: threadIdParam,
 	}
 	mock := &ThreadsGetter{
-		ThreadsRepository: &mock.FetcherMock{},
+		ThreadsRepository: &mock.RepositoryMock{},
 	}
 
 	threads, err := mock.Run(request)
@@ -28,7 +28,7 @@ func TestThreadsGetterRun_1件のスレッドが返却される(t *testing.T) {
 func TestThreadsGetterRun_1件以上のスレッドが返却される(t *testing.T) {
 	request := events.APIGatewayProxyRequest{}
 	mock := &ThreadsGetter{
-		ThreadsRepository: &mock.FetcherMock{},
+		ThreadsRepository: &mock.RepositoryMock{},
 	}
 
 	threads, err := mock.Run(request)

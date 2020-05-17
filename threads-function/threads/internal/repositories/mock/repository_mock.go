@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type FetcherMock struct {
+type RepositoryMock struct {
 	mock.Mock
 	ThreadsRepository repositories.ThreadsRepository
 }
 
-func (t *FetcherMock) FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
+func (t *RepositoryMock) FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
 	thread := models.Thread{
 		"001",
 		"2020-01-01",
@@ -25,7 +25,7 @@ func (t *FetcherMock) FetchThread(threadID models.ThreadID) ([]models.Thread, er
 	return threads, nil
 }
 
-func (t *FetcherMock) FetchThreads() ([]models.Thread, error) {
+func (t *RepositoryMock) FetchThreads() ([]models.Thread, error) {
 	thread := models.Thread{
 		"001",
 		"2020-01-01",
