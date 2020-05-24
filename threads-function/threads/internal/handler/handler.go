@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"encoding/json"
 
 	"threads/internal/actions"
 
@@ -24,14 +23,13 @@ var headers = map[string]string{
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factory := routes[request.HTTPMethod]
 	action := factory()
-	threads, err := action.Run(request)
+	jsonData, err := action.Run(request)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
 	}
-	threadJSON, _ := json.Marshal(threads)
 
 	return events.APIGatewayProxyResponse{
-		Body:       string(threadJSON),
+		Body:       string(jsonData),
 		StatusCode: 200,
 		Headers:    headers,
 	}, nil

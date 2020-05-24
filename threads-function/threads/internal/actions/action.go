@@ -1,13 +1,13 @@
 package actions
 
 import (
-	"threads/internal/models"
-
 	"github.com/aws/aws-lambda-go/events"
 )
+
+type JSONData string
 
 type ActionFactory func() Action
 
 type Action interface {
-	Run(request events.APIGatewayProxyRequest) ([]models.Thread, error)
+	Run(request events.APIGatewayProxyRequest) (JSONData, error)
 }

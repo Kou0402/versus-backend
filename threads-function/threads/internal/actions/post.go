@@ -18,19 +18,20 @@ func NewThreadsPoster() Action {
 	}
 }
 
-func (g *ThreadsPoster) Run(request events.APIGatewayProxyRequest) ([]models.Thread, error) {
+func (g *ThreadsPoster) Run(request events.APIGatewayProxyRequest) (JSONData, error) {
 	var thread models.Thread
 	err := json.Unmarshal([]byte(request.Body), &thread)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	err = g.ThreadsRepository.SaveThread(thread)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	threads := []models.Thread{thread}
 
-	return threads, nil
+	resultJSON, _ := json.Marshal(threads)
+	return JSONData(resultJSON), nil
 }
