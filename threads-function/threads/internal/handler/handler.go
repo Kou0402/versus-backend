@@ -10,7 +10,8 @@ import (
 )
 
 var routes = map[string]actions.ActionFactory{
-	"GET": actions.NewThreadsGetter,
+	"GET":  actions.NewThreadsGetter,
+	"POST": actions.NewThreadsPoster,
 }
 
 // CORS compatible
@@ -27,7 +28,6 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
 	}
-
 	threadJSON, _ := json.Marshal(threads)
 
 	return events.APIGatewayProxyResponse{

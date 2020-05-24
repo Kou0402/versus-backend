@@ -14,6 +14,7 @@ var (
 type ThreadsRepository interface {
 	FetchThread(threadID models.ThreadID) ([]models.Thread, error)
 	FetchThreads() ([]models.Thread, error)
+	SaveThread(thread models.Thread) error
 }
 
 type ThreadsRepositoryImpl struct{}

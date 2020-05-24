@@ -37,3 +37,7 @@ func (t *RepositoryMock) FetchThreads() ([]models.Thread, error) {
 	threads := []models.Thread{thread, thread}
 	return threads, nil
 }
+
+func (t *RepositoryMock) SaveThread(models.Thread) error {
+	return nil
+}
