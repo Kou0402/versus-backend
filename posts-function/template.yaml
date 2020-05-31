@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: versus backend function
+
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+  PostsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: posts/bin
+      Handler: posts
+      Runtime: go1.x
+      FunctionName: "posts"
+
+
