@@ -9,7 +9,8 @@ import (
 )
 
 var routes = map[string]actions.ActionFactory{
-	"GET": actions.NewPostsGetter,
+	"GET":  actions.NewPostsGetter,
+	"POST": actions.NewPostsPoster,
 }
 
 // CORS compatible

@@ -11,7 +11,7 @@ import (
 func (t *PostsRepositoryImpl) FetchPosts(threadId models.ThreadID) ([]models.Post, error) {
 	db := getDynamoSess()
 
-	partitionKey := "THREAD#" + "001"
+	partitionKey := "THREAD#" + string(threadId)
 	sortKey := "POST#"
 	queryInput := &dynamodb.QueryInput{
 		TableName: aws.String(tableName),

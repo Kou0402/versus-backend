@@ -13,6 +13,7 @@ var (
 
 type PostsRepository interface {
 	FetchPosts(threadId models.ThreadID) ([]models.Post, error)
+	SavePost(post models.Post) error
 }
 
 type PostsRepositoryImpl struct{}
