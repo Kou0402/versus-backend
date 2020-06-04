@@ -8,7 +8,8 @@ import (
 )
 
 var (
-	threadsTableName = "threads"
+	tableName = "versus"
+	indexName = "SortKey-index"
 )
 
 type ThreadsRepository interface {

@@ -24,8 +24,9 @@ func (g *ThreadsGetter) Run(request events.APIGatewayProxyRequest) (JSONData, er
 
 	if val, ok := request.PathParameters["threadId"]; ok {
 		threads, err = g.ThreadsRepository.FetchThread(models.ThreadID(val))
+	} else {
+		threads, err = g.ThreadsRepository.FetchThreads()
 	}
-	threads, err = g.ThreadsRepository.FetchThreads()
 
 	resultJSON, _ := json.Marshal(threads)
 	return JSONData(resultJSON), err

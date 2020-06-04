@@ -11,9 +11,22 @@ import (
 func (t *ThreadsRepositoryImpl) FetchThreads() ([]models.Thread, error) {
 	db := getDynamoSess()
 
-	result, err := db.Scan(&dynamodb.ScanInput{
-		TableName: aws.String(threadsTableName),
-	})
+	partitionKey := "INFO"
+	sortKey := "THREAD"
+	queryInput := &dynamodb.QueryInput{
+		TableName: aws.String(tableName),
+		IndexName: aws.String(indexName),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":partitionKey": {
+				S: aws.String(partitionKey),
+			},
+			":sortKey": {
+				S: aws.String(sortKey),
+			},
+		},
+		KeyConditionExpression: aws.String("SortKey = :partitionKey AND begins_with(PartitionKey, :sortKey)"),
+	}
+	result, err := db.Query(queryInput)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +43,17 @@ func (t *ThreadsRepositoryImpl) FetchThreads() ([]models.Thread, error) {
 func (t *ThreadsRepositoryImpl) FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
 	db := getDynamoSess()
 
+	partitionKey := "THREAD#" + threadID
+	sortKey := "INFO"
+
 	result, err := db.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String(threadsTableName),
+		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
-			"threadId": {
-				S: aws.String(string(threadID)),
+			"PartitionKey": {
+				S: aws.String(string(partitionKey)),
+			},
+			"SortKey": {
+				S: aws.String(string(sortKey)),
 			},
 		},
 	})

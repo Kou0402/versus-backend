@@ -17,9 +17,13 @@ func (t *ThreadsRepositoryImpl) SaveThread(thread models.Thread) error {
 		return err
 	}
 
+	th["SortKey"] = &dynamodb.AttributeValue{
+		S: aws.String("INFO"),
+	}
+
 	// Create an input.
 	input := &dynamodb.PutItemInput{
-		TableName: aws.String(threadsTableName),
+		TableName: aws.String(tableName),
 		Item:      th,
 	}
 
