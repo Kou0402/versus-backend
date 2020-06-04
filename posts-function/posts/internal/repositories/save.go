@@ -11,6 +11,9 @@ import (
 func (t *PostsRepositoryImpl) SavePost(post models.Post) error {
 	db := getDynamoSess()
 
+	post.ThreadID = "THREAD#" + post.ThreadID
+	post.PostID = "POST#" + post.ThreadID
+
 	// Convert item to dynamodb attribute.
 	po, err := dynamodbattribute.MarshalMap(post)
 	if err != nil {

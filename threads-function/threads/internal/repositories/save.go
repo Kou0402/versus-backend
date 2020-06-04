@@ -11,6 +11,8 @@ import (
 func (t *ThreadsRepositoryImpl) SaveThread(thread models.Thread) error {
 	db := getDynamoSess()
 
+	thread.ThreadID = "THREAD#" + thread.ThreadID
+
 	// Convert item to dynamodb attribute.
 	th, err := dynamodbattribute.MarshalMap(thread)
 	if err != nil {
