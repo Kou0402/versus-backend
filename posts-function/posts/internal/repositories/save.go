@@ -6,13 +6,18 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/google/uuid"
 )
 
 func (t *PostsRepositoryImpl) SavePost(post models.Post) error {
 	db := getDynamoSess()
 
-	post.ThreadID = "THREAD#" + post.ThreadID
-	post.PostID = "POST#" + post.ThreadID
+	u, err := uuid.NewRandom()
+	if err != nil {
+		return err
+	}
+	post.ThreadID = "THREAD-" + post.ThreadID
+	post.PostID = "POST-" + u.String()
 
 	// Convert item to dynamodb attribute.
 	po, err := dynamodbattribute.MarshalMap(post)

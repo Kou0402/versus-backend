@@ -11,16 +11,14 @@ import (
 func (t *PostsRepositoryImpl) FetchPosts(threadId models.ThreadID) ([]models.Post, error) {
 	db := getDynamoSess()
 
-	partitionKey := "THREAD#" + string(threadId)
-	sortKey := "POST#"
 	queryInput := &dynamodb.QueryInput{
 		TableName: aws.String(tableName),
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":threadId": {
-				S: aws.String(partitionKey),
+				S: aws.String("THREAD-" + string(threadId)),
 			},
 			":postId": {
-				S: aws.String(sortKey),
+				S: aws.String("POST-"),
 			},
 		},
 		KeyConditionExpression: aws.String("PartitionKey = :threadId AND begins_with(SortKey, :postId)"),

@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"strings"
 	"threads/internal/models"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -37,23 +38,24 @@ func (t *ThreadsRepositoryImpl) FetchThreads() ([]models.Thread, error) {
 		return nil, err
 	}
 
+	for i, t := range threads {
+		threads[i].ThreadID = strings.Replace(t.ThreadID, "THREAD-", "", 1)
+	}
+
 	return threads, nil
 }
 
 func (t *ThreadsRepositoryImpl) FetchThread(threadID models.ThreadID) ([]models.Thread, error) {
 	db := getDynamoSess()
 
-	partitionKey := "THREAD#" + threadID
-	sortKey := "INFO"
-
 	result, err := db.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"PartitionKey": {
-				S: aws.String(string(partitionKey)),
+				S: aws.String("THREAD-" + string(threadID)),
 			},
 			"SortKey": {
-				S: aws.String(string(sortKey)),
+				S: aws.String("INFO"),
 			},
 		},
 	})
@@ -67,6 +69,8 @@ func (t *ThreadsRepositoryImpl) FetchThread(threadID models.ThreadID) ([]models.
 	if err != nil {
 		return nil, err
 	}
+
+	threads[0].ThreadID = strings.Replace(threads[0].ThreadID, "THREAD-", "", 1)
 
 	return threads, nil
 }
